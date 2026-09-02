@@ -1,0 +1,248 @@
+:root {
+  --ink: #181512;
+  --paper: #fbfaf7;
+  --coffee: #2a211c;
+  --cream: #f4eee4;
+  --muted: #786b5e;
+  --line: #ded5c9;
+  --gold: #d7a256;
+  --green: #6f8560;
+  --plum: #62475f;
+  --rose: #b86d68;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    linear-gradient(135deg, rgba(215, 162, 86, 0.12), transparent 38%),
+    linear-gradient(315deg, rgba(111, 133, 96, 0.14), transparent 32%),
+    var(--paper);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.quiz-panel {
+  width: min(760px, 100%);
+  padding: 34px 0 0;
+  border-top: 5px solid var(--gold);
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  color: #827568;
+  font-size: 14px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8ded2;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gold);
+  transition: width 220ms ease;
+}
+
+h1 {
+  max-width: 680px;
+  margin: 0 0 18px;
+  color: var(--coffee);
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.intro {
+  max-width: 600px;
+  margin: 0 0 26px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+}
+
+.answer,
+.restart {
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.answer {
+  width: 100%;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 16px;
+  text-align: left;
+}
+
+.answer:hover {
+  border-color: var(--gold);
+  background: var(--cream);
+  transform: translateX(3px);
+}
+
+.answer-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(42, 33, 28, 0.06);
+}
+
+.answer-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.answer-cup .answer-icon {
+  color: #7b5132;
+  background: rgba(123, 81, 50, 0.12);
+}
+
+.answer-sparkles .answer-icon {
+  color: #b9832f;
+  background: rgba(185, 131, 47, 0.14);
+}
+
+.answer-chat .answer-icon {
+  color: var(--green);
+  background: rgba(111, 133, 96, 0.14);
+}
+
+.answer-gem .answer-icon {
+  color: var(--plum);
+  background: rgba(98, 71, 95, 0.13);
+}
+
+.result-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 34px;
+  align-items: center;
+}
+
+.result-label {
+  margin: 0 0 12px;
+  color: var(--rose);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.coffee {
+  margin: 0 0 12px;
+  color: var(--coffee);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.restart {
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--coffee);
+  border-radius: 6px;
+  background: var(--coffee);
+  color: #fffaf1;
+  font-weight: 700;
+}
+
+.restart:hover {
+  background: var(--green);
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.drink-image {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background-image: url("/result-drinks-reference.png");
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+  box-shadow: 0 20px 60px rgba(42, 33, 28, 0.14);
+}
+
+@media (max-width: 760px) {
+  .shell {
+    padding: 22px;
+    place-items: start center;
+  }
+
+  .quiz-panel {
+    padding-top: 24px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .result-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .drink-image {
+    max-width: 320px;
+  }
+
+}

@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Basecamp Coffee Quiz</title>
+  <style>
+    :root {
+      --ink: #181512;
+      --paper: #fbfaf7;
+      --coffee: #2a211c;
+      --cream: #f4eee4;
+      --muted: #786b5e;
+      --line: #ded5c9;
+      --gold: #d7a256;
+      --green: #6f8560;
+      --plum: #62475f;
+      --rose: #b86d68;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(215, 162, 86, 0.12), transparent 38%),
+        linear-gradient(315deg, rgba(111, 133, 96, 0.14), transparent 32%),
+        var(--paper);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .quiz-panel {
+      width: min(760px, 100%);
+      padding: 34px 0 0;
+      border-top: 5px solid var(--gold);
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+      color: #827568;
+      font-size: 14px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8ded2;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--gold);
+      transition: width 220ms ease;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 0 0 18px;
+      color: var(--coffee);
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 600px;
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer,
+    .restart {
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .answer {
+      width: 100%;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .answer:hover {
+      border-color: var(--gold);
+      background: var(--cream);
+      transform: translateX(3px);
+    }
+
+    .answer-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(42, 33, 28, 0.06);
+    }
+
+    .answer-icon svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .answer-cup .answer-icon { color: #7b5132; background: rgba(123, 81, 50, 0.12); }
+    .answer-sparkles .answer-icon { color: #b9832f; background: rgba(185, 131, 47, 0.14); }
+    .answer-chat .answer-icon { color: var(--green); background: rgba(111, 133, 96, 0.14); }
+    .answer-gem .answer-icon { color: var(--plum); background: rgba(98, 71, 95, 0.13); }
+
+    .result-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+      gap: 34px;
+      align-items: center;
+    }
+
+    .result-label {
+      margin: 0 0 12px;
+      color: var(--rose);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .coffee {
+      margin: 0 0 12px;
+      color: var(--coffee);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .restart {
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid var(--coffee);
+      border-radius: 6px;
+      background: var(--coffee);
+      color: #fffaf1;
+      font-weight: 700;
+    }
+
+    .restart:hover {
+      background: var(--green);
+      border-color: var(--green);
+      transform: translateY(-1px);
+    }
+
+    .drink-image {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background-image: url("result-drinks-reference.png");
+      background-size: 200% 200%;
+      background-repeat: no-repeat;
+      box-shadow: 0 20px 60px rgba(42, 33, 28, 0.14);
+    }
+
+    @media (max-width: 760px) {
+      .shell { padding: 22px; place-items: start center; }
+      .quiz-panel { padding-top: 24px; }
+      h1 { font-size: 32px; }
+      .result-layout { grid-template-columns: 1fr; }
+      .drink-image { max-width: 320px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="quiz-panel" id="app"></section>
+  </main>
+
+  <script>
+    const results = {
+      classic: {
+        name: "Образцовый Классик",
+        coffee: "Фильтр",
+        description: "Ты ценишь понятный ритуал, стабильность и хороший кофе без лишнего шума.",
+        position: "left top"
+      },
+      sweet: {
+        name: "Сладкий Энтузиаст",
+        coffee: "Латте на кокосовом",
+        description: "Ты любишь мягкость, настроение и маленькие радости в течение дня.",
+        position: "right top"
+      },
+      talker: {
+        name: "Кофейный Собеседник",
+        coffee: "Капучино",
+        description: "Хороший разговор начинается с хорошей чашки.",
+        position: "left bottom"
+      },
+      aesthete: {
+        name: "Чувственный Эстет",
+        coffee: "Раф кофе",
+        description: "Ты выбираешь комфорт, красоту деталей и мягкий вкус с характером.",
+        position: "right bottom"
+      }
+    };
+
+    const tieOrder = ["classic", "sweet", "talker", "aesthete"];
+    const iconPaths = {
+      cup: '<path d="M6 8h11v5a5 5 0 0 1-5 5H11a5 5 0 0 1-5-5V8z" /><path d="M17 10h1.5a2 2 0 0 1 0 4H17" /><path d="M7 21h10" />',
+      sparkles: '<path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8-4.8-1.7 4.8-1.7L12 3z" /><path d="M18 15l.8 2.2L21 18l-2.2.8L18 21l-.8-2.2L15 18l2.2-.8L18 15z" />',
+      chat: '<path d="M5 6.5h14v9H9l-4 3v-12z" />',
+      gem: '<path d="M6.5 4.5h11L21 9l-9 11L3 9l3.5-4.5z" /><path d="M3 9h18M8 4.5L12 20l4-15.5" />'
+    };
+
+    const questions = [
+      ["Как начинается твой идеальный выходной?", [
+        ["Спокойно, с любимым ритуалом", "classic", "cup"],
+        ["С чем-то сладким и новым", "sweet", "sparkles"],
+        ["За разговором с близким человеком", "talker", "chat"],
+        ["Красиво, медленно, со вкусом", "aesthete", "gem"]
+      ]],
+      ["Какой фильм ты выберешь вечером?", [
+        ["Проверенную классику, которую приятно пересматривать", "classic", "cup"],
+        ["Легкую романтическую комедию или feel-good кино", "sweet", "sparkles"],
+        ["Что-то, что потом хочется обсудить с друзьями", "talker", "chat"],
+        ["Красивую драму с атмосферой и деталями", "aesthete", "gem"]
+      ]],
+      ["Что тебе ближе в поездке?", [
+        ["Знакомый маршрут, хороший отель, все продумано", "classic", "cup"],
+        ["Пробовать десерты, напитки и милые места", "sweet", "sparkles"],
+        ["Знакомиться с людьми и находить локальные истории", "talker", "chat"],
+        ["Искать красивые улицы, музеи и тихие дворики", "aesthete", "gem"]
+      ]],
+      ["Выбери предмет для рабочего стола", [
+        ["Хорошая кружка, которой пользуешься каждый день", "classic", "cup"],
+        ["Маленькая приятная штука для настроения", "sweet", "sparkles"],
+        ["Блокнот для идей и разговоров", "talker", "chat"],
+        ["Красивый минималистичный объект", "aesthete", "gem"]
+      ]],
+      ["Что тебя цепляет в кофейне?", [
+        ["Стабильно хороший вкус", "classic", "cup"],
+        ["Мягкие сладкие напитки и сезонные новинки", "sweet", "sparkles"],
+        ["Бариста, которые помнят тебя и твой заказ", "talker", "chat"],
+        ["Атмосфера, свет, посуда и детали", "aesthete", "gem"]
+      ]],
+      ["Какой комплимент тебе ближе?", [
+        ["На тебя можно положиться", "classic", "cup"],
+        ["С тобой становится теплее", "sweet", "sparkles"],
+        ["С тобой легко говорить", "talker", "chat"],
+        ["У тебя тонкий вкус", "aesthete", "gem"]
+      ]]
+    ];
+
+    let questionIndex = 0;
+    let answers = [];
+    const app = document.querySelector("#app");
+
+    function icon(type) {
+      return `<span class="answer-icon"><svg viewBox="0 0 24 24" aria-hidden="true">${iconPaths[type]}</svg></span>`;
+    }
+
+    function getWinner() {
+      const scores = { classic: 0, sweet: 0, talker: 0, aesthete: 0 };
+      answers.forEach((answer) => scores[answer] += 1);
+      return tieOrder.reduce((best, key) => scores[key] > scores[best] ? key : best, tieOrder[0]);
+    }
+
+    function renderQuestion() {
+      const [text, options] = questions[questionIndex];
+      const percent = Math.round((questionIndex / questions.length) * 100);
+      app.innerHTML = `
+        <p class="eyebrow">Basecamp Coffee</p>
+        <div class="progress-row"><span>Вопрос ${questionIndex + 1} из ${questions.length}</span><span>${percent}%</span></div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-fill" style="width:${percent}%"></div></div>
+        <h1>${text}</h1>
+        <p class="intro">Выбирай, здесь нет неправильных ответов, только твой кофейный ритм.</p>
+        <div class="answers">
+          ${options.map(([label, personality, type]) => `
+            <button class="answer answer-${type}" type="button" data-personality="${personality}">
+              ${icon(type)}<span>${label}</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+      app.querySelectorAll(".answer").forEach((button) => {
+        button.addEventListener("click", () => {
+          answers.push(button.dataset.personality);
+          questionIndex += 1;
+          render();
+        });
+      });
+    }
+
+    function renderResult() {
+      const result = results[getWinner()];
+      app.innerHTML = `
+        <p class="eyebrow">Basecamp Coffee</p>
+        <div class="result-layout">
+          <div>
+            <p class="result-label">Твой результат</p>
+            <h1>Ты - ${result.name}</h1>
+            <p class="coffee">Твой кофе: ${result.coffee}</p>
+            <p class="intro">${result.description}</p>
+            <button class="restart" type="button">Пройти еще раз</button>
+          </div>
+          <div class="drink-image" role="img" aria-label="${result.coffee}" style="background-position:${result.position}"></div>
+        </div>
+      `;
+      app.querySelector(".restart").addEventListener("click", () => {
+        questionIndex = 0;
+        answers = [];
+        render();
+      });
+    }
+
+    function render() {
+      if (questionIndex >= questions.length) renderResult();
+      else renderQuestion();
+    }
+
+    render();
+  </script>
+</body>
+</html>
